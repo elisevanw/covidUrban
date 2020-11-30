@@ -26,13 +26,16 @@ read_ifr_data <- function(){
 
 read_interventions <- function(countries){
   interventions = read.csv('data/interventions.csv', stringsAsFactors = FALSE)
-  names_interventions = c('Schools + Universities','Self-isolating if ill', 'Public events', 'Lockdown', 'Social distancing encouraged')
+  names_interventions = c('Schools + Universities','Self-isolating if ill', 'Public events', 'Lockdown', 'Social distancing encouraged', 'Closure of restaurants', 'Closure of restaurants2')
   interventions <- interventions[interventions$Type %in% names_interventions,]
   interventions <- interventions[,c(1,2,4)]
+  print(interventions)
   interventions <- spread(interventions, Type, Date.effective)
-  names(interventions) <- c('Country','lockdown', 'public_events', 'schools_universities','self_isolating_if_ill', 'social_distancing_encouraged')
-  interventions <- interventions[c('Country','schools_universities', 'self_isolating_if_ill', 'public_events', 'lockdown', 'social_distancing_encouraged')]
+  names(interventions) <- c('Country','lockdown', 'public_events', 'schools_universities','self_isolating_if_ill', 'social_distancing_encouraged', 'closure_restaurants2')
+  interventions <- interventions[c('Country','schools_universities', 'self_isolating_if_ill', 'public_events', 'lockdown', 'social_distancing_encouraged', 'closure_restaurants2')]
   interventions$schools_universities <- as.Date(interventions$schools_universities, format = "%d.%m.%Y")
+  interventions$closure_restaurants <- as.Date(interventions$closure_restaurants, format = "%d.%m.%Y")
+  interventions$closure_restaurants2 <- as.Date(interventions$closure_restaurants2, format = "%d.%m.%Y")
   interventions$lockdown <- as.Date(interventions$lockdown, format = "%d.%m.%Y")
   interventions$public_events <- as.Date(interventions$public_events, format = "%d.%m.%Y")
   interventions$self_isolating_if_ill <- as.Date(interventions$self_isolating_if_ill, format = "%d.%m.%Y")

@@ -31,23 +31,34 @@ make_three_pannel_plot <- function(){
   load(paste0("results/", filename2))
   print(sprintf("loading: %s",paste0("results/",filename2)))
   covariates = read.csv('data/interventions.csv', stringsAsFactors = FALSE)
+
   names_covariates = c('Schools + Universities','Self-isolating if ill', 'Public events', 
-                       'Lockdown', 'Social distancing encouraged', 'Closure of restaurants')
+                       'Lockdown', 'Social distancing encouraged', 'Closure of restaurants',
+                       'Open schools', 'Open restaurants', 'Face Masks', 'Closure of restaurants2')
   covariates <- covariates %>%
     filter((Type %in% names_covariates))
-  print(covariates)
+
   covariates <- covariates[,c(1,2,4)]
   covariates <- spread(covariates, Type, Date.effective)
-  print(covariates)
-  names(covariates) <- c('Country','restaurants_closed', 'lockdown', 'public_events', 'schools_universities','self_isolating_if_ill', 'social_distancing_encouraged')
-  covariates <- covariates[c('Country','schools_universities', 'self_isolating_if_ill', 'public_events', 'lockdown', 'social_distancing_encouraged', 'restaurants_closed')]
+
+  names(covariates) <- c('Country','schools_universities','closure_restaurants2', 'face_masks', 
+                         'lockdown', 'open_restaurants', 'open_schools', 'public_events',
+                         'closure_restaurants', 'social_distancing_encouraged', 'self_isolating_if_ill')
+  covariates <- covariates[c('Country','open_restaurants','public_events','social_distancing_encouraged', 'lockdown',
+                             'self_isolating_if_ill', 'closure_restaurants', 'open_schools', 'schools_universities',
+                             'face_masks', 'closure_restaurants2')]
   covariates$schools_universities <- as.Date(covariates$schools_universities, format = "%d.%m.%Y")
   covariates$lockdown <- as.Date(covariates$lockdown, format = "%d.%m.%Y")
   covariates$public_events <- as.Date(covariates$public_events, format = "%d.%m.%Y")
   covariates$self_isolating_if_ill <- as.Date(covariates$self_isolating_if_ill, format = "%d.%m.%Y")
   covariates$social_distancing_encouraged <- as.Date(covariates$social_distancing_encouraged, format = "%d.%m.%Y")
-  covariates$restaurants_closed <- as.Date(covariates$restaurants_closed, format = "%d.%m.%Y")
-  print(covariates)
+  covariates$closure_restaurants <- as.Date(covariates$closure_restaurants, format = "%d.%m.%Y")
+  covariates$open_schools <- as.Date(covariates$open_schools, format = "%d.%m.%Y")
+  covariates$open_restaurants <- as.Date(covariates$open_restaurants, format = "%d.%m.%Y")
+  covariates$face_masks <- as.Date(covariates$face_masks, format = "%d.%m.%Y")
+  covariates$closure_restaurants2 <- as.Date(covariates$closure_restaurants2, format = "%d.%m.%Y")
+  
+
   
   all_data <- data.frame()
   all_data_out <- data.frame()
@@ -79,7 +90,7 @@ make_three_pannel_plot <- function(){
     
     
     # delete these 2 lines
-    covariates_country <- covariates[which(covariates$Country == country), 2:7] 
+    covariates_country <- covariates[which(covariates$Country == country), 2:11] 
   
     covariates_country_long <- gather(covariates_country, key = "key", 
                                       value = "value")
@@ -215,12 +226,9 @@ make_plots <- function(data_country, covariates_country_long,
     guides(fill=guide_legend(ncol=1))
   
   
-  plot_labels <- c("Complete lockdown", 
-                   "Public events banned",
-                   "School closure",
-                   "Self isolation",
-                   "Social distancing \n encouraged",
-                   "Restaurants closed")
+  plot_labels <- c('Schools + Universities','Closure of restaurants second time', 'Face masks', 
+                   'Lockdown', 'Open schools', 'Open restaurants',
+                   'Social distancing encouraged', 'Closure restaurants', 'Public Events', 'Self isolating if ill')
   
   # Plotting interventions
   data_rt_95 <- data.frame(data_country$time, 
@@ -252,7 +260,7 @@ make_plots <- function(data_country, covariates_country_long,
     scale_fill_manual(name = "", labels = c("50%", "95%"),
                       values = c(alpha("seagreen", 0.75), alpha("seagreen", 0.5))) + 
     scale_shape_manual(name = "Interventions", labels = plot_labels,
-                       values = c(21, 22, 23, 24, 25, 12)) + 
+                       values = c(21, 22, 23, 24, 25, 12, 13, 14, 15, 16)) + 
     scale_colour_discrete(name = "Interventions", labels = plot_labels) + 
     scale_x_date(date_breaks = "weeks", labels = date_format("%e %b"), 
                  limits = c(data_country$time[1], 

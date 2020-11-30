@@ -11,6 +11,7 @@ filename <- args[1]
 load(paste0("results/", filename))
 
 alpha = data.frame(as.matrix(out$alpha))
+print(alpha)
 plot_labels <- c("School Closure",
                  "Self Isolation",
                  "Public Events",

@@ -56,7 +56,20 @@ d <- read_obs_data(countries)
 ifr.by.country <- read_ifr_data()
 
 # Read interventions
-interventions <- read_interventions(countries)
+#interventions <- read_interventions(countries)
+interventions2 <- read.csv('data/interventions2.csv')
+names(interventions2) <- c('Country','schools_universities','public_events', 'social_distancing_encouraged', 'lockdown', 'self_isolating_if_ill', 'closure_restaurants', 'open_schools', 'open_restaurants', 'face_masks', 'closure_restaurants2')
+interventions2$schools_universities <- as.Date(interventions2$schools_universities, format = "%d.%m.%Y")
+interventions2$public_events <- as.Date(interventions2$public_events, format = "%d.%m.%Y")
+interventions2$social_distancing_encouraged <- as.Date(interventions2$social_distancing_encouraged, format = "%d.%m.%Y")
+interventions2$lockdown <- as.Date(interventions2$lockdown, format = "%d.%m.%Y")
+interventions2$self_isolating_if_ill <- as.Date(interventions2$self_isolating_if_ill, format = "%d.%m.%Y")
+interventions2$closure_restaurants <- as.Date(interventions2$closure_restaurants, format = "%d.%m.%Y")
+interventions2$open_schools <- as.Date(interventions2$open_schools, format = "%d.%m.%Y")
+interventions2$open_restaurants <- as.Date(interventions2$open_restaurants, format = "%d.%m.%Y")
+interventions2$face_masks <- as.Date(interventions2$face_masks, format = "%d.%m.%Y")
+interventions2$closure_restaurants2 <- as.Date(interventions2$closure_restaurants2, format = "%d.%m.%Y")
+
 
 forecast <- 7 # increase to get correct number of days to simulate
 # Maximum number of days to simulate
