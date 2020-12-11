@@ -6,7 +6,7 @@ library(dplyr)
 read_obs_data <- function(countries){
   # Read the deaths and cases data
   #d <- readRDS('data/COVID-19-up-to-date.rds')
-  d <- readRDS('data/my_data.rds')
+  d <- readRDS('data/dataAprilNov.rds')
   colnames(d)[colnames(d) == "countriesAndTerritories"] <- "Country"
   d <-d[d$Country %in% countries$Regions, c(1,5,6,7)]
   names(d)[names(d) == "deaths"] <- "Deaths"

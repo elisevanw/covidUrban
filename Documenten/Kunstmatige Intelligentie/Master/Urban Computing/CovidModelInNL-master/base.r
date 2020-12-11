@@ -58,13 +58,13 @@ ifr.by.country <- read_ifr_data()
 # Read interventions
 #interventions <- read_interventions(countries)
 interventions2 <- read.csv('data/interventions2.csv')
-names(interventions2) <- c('Country','schools_universities','public_events', 'social_distancing_encouraged', 'lockdown', 'self_isolating_if_ill', 'closure_restaurants', 'open_schools', 'open_restaurants', 'face_masks', 'closure_restaurants2')
-interventions2$schools_universities <- as.Date(interventions2$schools_universities, format = "%d.%m.%Y")
-interventions2$public_events <- as.Date(interventions2$public_events, format = "%d.%m.%Y")
-interventions2$social_distancing_encouraged <- as.Date(interventions2$social_distancing_encouraged, format = "%d.%m.%Y")
-interventions2$lockdown <- as.Date(interventions2$lockdown, format = "%d.%m.%Y")
-interventions2$self_isolating_if_ill <- as.Date(interventions2$self_isolating_if_ill, format = "%d.%m.%Y")
-interventions2$closure_restaurants <- as.Date(interventions2$closure_restaurants, format = "%d.%m.%Y")
+names(interventions2) <- c('Country', 'open_schools', 'open_restaurants', 'face_masks', 'closure_restaurants2')
+#interventions2$schools_universities <- as.Date(interventions2$schools_universities, format = "%d.%m.%Y")
+#interventions2$public_events <- as.Date(interventions2$public_events, format = "%d.%m.%Y")
+#interventions2$social_distancing_encouraged <- as.Date(interventions2$social_distancing_encouraged, format = "%d.%m.%Y")
+#interventions2$lockdown <- as.Date(interventions2$lockdown, format = "%d.%m.%Y")
+#interventions2$self_isolating_if_ill <- as.Date(interventions2$self_isolating_if_ill, format = "%d.%m.%Y")
+#interventions2$closure_restaurants <- as.Date(interventions2$closure_restaurants, format = "%d.%m.%Y")
 interventions2$open_schools <- as.Date(interventions2$open_schools, format = "%d.%m.%Y")
 interventions2$open_restaurants <- as.Date(interventions2$open_restaurants, format = "%d.%m.%Y")
 interventions2$face_masks <- as.Date(interventions2$face_masks, format = "%d.%m.%Y")
@@ -85,7 +85,7 @@ reported_cases = processed_data$reported_cases
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
 m = stan_model(paste0('stan-models/',StanModel,'.stan'))
-
+DEBUG <- TRUE
 if(DEBUG) {
   fit = sampling(m,data=stan_data,iter=40,warmup=20,chains=2)
 } else if (FULL) {

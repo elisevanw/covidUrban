@@ -160,12 +160,12 @@ for(Country in countries) {
   N = length(d1$Cases)
   print(sprintf("%s has %d days of data",Country,N))
   forecast = N2 - N
-  if(forecast < 0) {
-    print(sprintf("%s: %d", Country, N))
-    print("ERROR!!!! increasing N2")
-    N2 = N
-    forecast = N2 - N
-  }
+  #if(forecast < 0) {
+   # print(sprintf("%s: %d", Country, N))
+    #print("ERROR!!!! increasing N2")
+    #N2 = N
+    #forecast = N2 - N
+  #}
   
   # IFR is the overall probability of dying given infection
   convolution = function(u) (IFR * ecdf.saved(u))

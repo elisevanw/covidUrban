@@ -95,6 +95,7 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     for(i in 2:N2) {
       f[i] = (convolution(i+.5) - convolution(i-.5)) 
     }
+    print("CHECCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCK")
     reported_cases[[Country]] = as.vector(as.numeric(region$Cases))
     deaths=c(as.vector(as.numeric(region$Deaths)),rep(-1,forecast))
     cases=c(as.vector(as.numeric(region$Cases)),rep(-1,forecast))

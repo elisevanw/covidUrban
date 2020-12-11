@@ -69,7 +69,7 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     stan_data$EpidemicStart = as.array(c(stan_data$EpidemicStart,index1+1-index2))
     stan_data$pop = as.array(c(stan_data$pop,region_pop$popt))
     # NPI interventionss are being used
-    interventions_region <- interventions2[interventions2$Country == Country, c(2,3,4,5,6,7,8,9,10,11)] # school, self-isolation, public, lockdown, social-distancing, restaurants
+    interventions_region <- interventions2[interventions2$Country == Country, c(2,3,4,5)] # school, self-isolation, public, lockdown, social-distancing, restaurants
     print(interventions_region)
     for (ii in 1:ncol(interventions_region)) {
       covariate = names(interventions_region)[ii]
@@ -83,7 +83,7 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     forecast = N2 - N
     if(forecast < 0) {
       print(sprintf("%s: %d", Country, N))
-      print("ERROR!!!! increasing N2")
+      print("ERROR GOOD!!!! increasing N2")
       N2 = N
       forecast = N2 - N
     }
@@ -102,19 +102,14 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     deaths_by_country[[Country]] = as.vector(as.numeric(region$Deaths))
     region_intervention <- as.data.frame(region[, colnames(interventions_region)])
     region_intervention[N:(N+forecast),] <- region_intervention[N,]
+    print("REGION INTERVENTION")
     print(region_intervention)
-    school =region_intervention[,1]
-    publicEvents =region_intervention[,2]
-    socialDistancing = region_intervention[,3]
-    lockdown = region_intervention[,4]
-    selfIsolation = region_intervention[,5]
-    restaurantsClosed = region_intervention[,6]
-    openSchools = region_intervention[,7]
-    openRestaurants = region_intervention[,8]
-    faceMasks = region_intervention[,9]   
-    restaurantsClosed2 = region_intervention[,10]
+    openSchools = region_intervention[,1]
+    openRestaurants = region_intervention[,2]
+    faceMasks = region_intervention[,3]   
+    restaurantsClosed2 = region_intervention[,4]
     
-    firstIntervention = 1*((school+ selfIsolation+ publicEvents+ lockdown + socialDistancing) >= 1)
+    firstIntervention = 1*((openSchools) >= 1)
     ## append data
     stan_data$N = c(stan_data$N,N)
     # stan_data$x = cbind(stan_data$x,x)
@@ -127,9 +122,7 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     if(length(stan_data$N) == 1) {
       stan_data$N = as.array(stan_data$N)
     }
-    df_features = data.frame('school' = school, 'selfIsolation' = selfIsolation, 'publicEvents' = publicEvents,
-                             'firstIntervention' = firstIntervention, 'lockdown' = lockdown, 'socialDistancing' = socialDistancing,
-                             'restaurantsClosed'=restaurantsClosed, 'openSchools' = openSchools, 'openRestaurants' = openRestaurants,
+    df_features = data.frame( 'openSchools' = openSchools, 'openRestaurants' = openRestaurants,
                              'faceMasks' = faceMasks, 'restaurantsClosed2' = restaurantsClosed2
                              )
     print(df_features)
