@@ -75,7 +75,7 @@ forecast <- 7 # increase to get correct number of days to simulate
 # Maximum number of days to simulate
 N2 <- (max(d$dateRep) - min(d$dateRep) + 1 + forecast)[[1]]
 
-processed_data <- process_covariates(countries = countries, interventions = interventions, 
+processed_data <- process_covariates(countries = countries, interventions = interventions2, 
                                      d = d , ifr.by.country = ifr.by.country, N2 = N2)
 stan_data = processed_data$stan_data
 dates = processed_data$dates
@@ -85,7 +85,7 @@ reported_cases = processed_data$reported_cases
 options(mc.cores = parallel::detectCores())
 rstan_options(auto_write = TRUE)
 m = stan_model(paste0('stan-models/',StanModel,'.stan'))
-DEBUG <- TRUE
+
 if(DEBUG) {
   fit = sampling(m,data=stan_data,iter=40,warmup=20,chains=2)
 } else if (FULL) {
