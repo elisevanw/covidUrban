@@ -20,6 +20,7 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     )
     serial.interval = rbind(serial.interval, pad_serial.interval)
   }
+  print(serial.interval)
   # various distributions required for modeling
   mean1 <- 5.1; cv1 <- 0.86; # infection to onset
   mean2 <- 17.8; cv2 <- 0.45 # onset to death
@@ -70,7 +71,7 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     stan_data$pop = as.array(c(stan_data$pop,region_pop$popt))
     # NPI interventionss are being used
     interventions_region <- interventions2[interventions2$Country == Country, c(2,3,4,5)] # school, self-isolation, public, lockdown, social-distancing, restaurants
-    print(interventions_region)
+
     for (ii in 1:ncol(interventions_region)) {
       covariate = names(interventions_region)[ii]
       region[covariate] <- (region$dateRep >= interventions_region[1,covariate])*1  # should this be > or >=?
@@ -83,7 +84,7 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     forecast = N2 - N
     if(forecast < 0) {
       print(sprintf("%s: %d", Country, N))
-      print("ERROR GOOD!!!! increasing N2")
+      print("ERROR MARK!!!! increasing N2")
       N2 = N
       forecast = N2 - N
     }
@@ -102,8 +103,6 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     deaths_by_country[[Country]] = as.vector(as.numeric(region$Deaths))
     region_intervention <- as.data.frame(region[, colnames(interventions_region)])
     region_intervention[N:(N+forecast),] <- region_intervention[N,]
-    print("REGION INTERVENTION")
-    print(region_intervention)
     openSchools = region_intervention[,1]
     openRestaurants = region_intervention[,2]
     faceMasks = region_intervention[,3]   
@@ -125,7 +124,6 @@ process_covariates <- function(countries, interventions, d, ifr.by.country,N2){
     df_features = data.frame( 'openSchools' = openSchools, 'openRestaurants' = openRestaurants,
                              'faceMasks' = faceMasks, 'restaurantsClosed2' = restaurantsClosed2
                              )
-    print(df_features)
     features <- as.matrix(df_features)
     covariate_list[[k]] <- features
     k <- k+1
